@@ -1,12 +1,11 @@
 import express from 'express';
-import cors from 'cors';
 import authRoutes from './routes/auth.js';
 import usuariosRoutes from './routes/usuarios.js';
 import reportesRoutes from './routes/reportes.js';
-
 import cors from 'cors';
 
-// ...otros imports
+// ¡AQUÍ!
+const app = express();
 
 app.use(cors({
   origin: ['https://micrositiolubriagsa.netlify.app', 'http://localhost:5173'],
