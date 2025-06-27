@@ -4,12 +4,15 @@ import authRoutes from './routes/auth.js';
 import usuariosRoutes from './routes/usuarios.js';
 import reportesRoutes from './routes/reportes.js';
 
-const app = express();
+import cors from 'cors';
 
-// Aquí la configuración CORRECTA de CORS:
+// ...otros imports
+
 app.use(cors({
-  origin: 'https://micrositiolubriagsa.netlify.app',
-  credentials: true
+  origin: ['https://micrositiolubriagsa.netlify.app', 'http://localhost:5173'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());

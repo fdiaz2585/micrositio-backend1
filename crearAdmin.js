@@ -1,35 +1,19 @@
-import db from './database.js';
 import bcrypt from 'bcrypt';
+import sqlite3 from 'sqlite3';
 
-const crearAdmin = async () => {
-  try {
-    db.get(`SELECT * FROM users WHERE email = ?`, ['soporte@lubriagsa.com'], async (err, row) => {
-      if (err) {
-        console.error('Error consultando el usuario:', err.message);
-      } else if (row) {
-        console.log('❌ Ya existe un usuario con ese correo.');
-      } else {
-        const passwordPlain = 'admin123';
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(passwordPlain, saltRounds);
+const db = new sqlite3.Database('./database.sqlite');
+const saltRounds = 10;
+const plainPassword = 'admin123'; // contraseña real
 
-        db.run(
-          `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
-          ['Admin', 'soluinfomatica@gmail.com', hashedPassword, 'admin123'],
-          function (err) {
-            if (err) {
-              console.error('Error insertando el usuario:', err.message);
-            } else {
-              console.log('✅ Usuario administrador creado con ID:', this.lastID);
-            }
-          }
-        );
-      }
-    });
-  } catch (error) {
-    console.error('Error creando admin:', error);
-  }
-};
-
-crearAdmin();
+bcrypt.hash(plainPassword, saltRounds, function(err, hash) {
+  db.run(
+    `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
+    ['SuperAdmin', 'comunicacion@lubriagsa.com.mx', hash, 'admin123'],
+    function(err) {
+      if (err) return console.error('ERROR:', err.message);
+      console.log('Usuario admin creado con contraseña:', plainPassword);
+      db.close();
+    }
+  );
+});
 
